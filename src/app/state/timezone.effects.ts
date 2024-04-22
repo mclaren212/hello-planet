@@ -11,7 +11,7 @@ export class TimeZoneEffects {
     ofType(TimeZoneActions.fetchPlanet),
     mergeMap(action =>
       this.apiService.getPlanetByTimeZone(action.timeZone).pipe(
-        map(planet => TimeZoneActions.fetchPlanetSuccess({ planet: planet })),
+        map(response => TimeZoneActions.fetchPlanetSuccess({ planet: response.planet })),
         catchError(() => of(TimeZoneActions.fetchPlanetFailure()))
       )
     )
