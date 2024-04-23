@@ -6,6 +6,7 @@ import { fetchPlanet } from './state/timezone.actions';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { State } from './state/timezone.reducer';
+import { ApiService } from './services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +21,19 @@ export class AppComponent {
     return state.timeZone.planet;
   });
 
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>, private apiService: ApiService) {}
 
   fetchPlanetForTimeZone() {
     if (this.selectedTimeZone) {
       this.store.dispatch(fetchPlanet({ timeZone: this.selectedTimeZone }));
     }
+  }
+
+  logActivity(selectValue: string) {
+    this.apiService.logActivityToMongoDB({
+      action: 'switch-dropdown',
+      value: selectValue,
+      timeStamp: new Date()
+    })
   }
 }

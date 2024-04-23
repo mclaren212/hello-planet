@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { of, Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export interface GetPlanetResponse {
   planet: string
+}
+
+export interface ActivityData {
+  action: string,
+  value: string,
+  timeStamp: Date
 }
 
 @Injectable({
@@ -24,8 +30,17 @@ export class ApiService {
     // console.log(mockPlanets);
     // return of(mockPlanets[timeZone]);
     const resp: Observable<GetPlanetResponse> = this.http
-    .get<GetPlanetResponse>(functionUrl);
-    resp.subscribe(value => console.log('Observable emitted the next value: ' + value));
+      .get<GetPlanetResponse>(functionUrl);
+    resp.subscribe(value => console.log(value));
     return resp;
   };
+
+  logActivityToMongoDB(activityData: ActivityData) {
+    const functionUrl = 'https://post-user-action.azurewebsites.net/api/post-user-action';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    const opts = { headers };
+    this.http.post<ActivityData>(functionUrl, activityData, opts).subscribe(response => console.log(response));;
+  }
 }

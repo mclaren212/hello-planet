@@ -226,7 +226,7 @@
         </defs>
       </svg>
       <h1>Hello, {{ planet | async }}</h1>
-      <select [(ngModel)]="selectedTimeZone" (change)="fetchPlanetForTimeZone()">
+      <select #timezone [(ngModel)]="selectedTimeZone" (change)="fetchPlanetForTimeZone(); logActivity(timezone.value);">
         <option value="">Select</option>
         <option value="PST">Pacific Standard Time (PST)</option>
         <option value="MST">Mountain Standard Time (MST)</option>
